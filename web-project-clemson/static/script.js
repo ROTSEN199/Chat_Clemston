@@ -31,28 +31,37 @@ sendButton.addEventListener('click', () => {
 
 recordButton.addEventListener('click', () => {
     if (!isRecording) {
-        chunks = [];
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(stream => {
-                recorder = new MediaRecorder(stream);
-                recorder.start();
-                isRecording = true;
-                recordButton.textContent = 'Detener';
-
-                recorder.ondataavailable = e => {
-                    chunks.push(e.data);
-                    if (recorder.state == 'inactive') {
-                        let blob = new Blob(chunks, { type: 'audio/wav' });
-                        uploadAudio(blob);
-                    }
-                };
-            }).catch(console.error);
+        startRecording();
     } else {
-        recorder.stop();
-        isRecording = false;
-        recordButton.textContent = 'Grabar';
+        stopRecording();
     }
 });
+
+function startRecording() {
+    chunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            recorder = new MediaRecorder(stream);
+            recorder.start();
+            isRecording = true;
+            recordButton.textContent = 'Detener';
+
+            recorder.ondataavailable = e => {
+                chunks.push(e.data);
+                if (recorder.state === 'inactive') {
+                    let blob = new Blob(chunks, { type: 'audio/wav' });
+                    uploadAudio(blob);
+                }
+            };
+        })
+        .catch(console.error);
+}
+
+function stopRecording() {
+    recorder.stop();
+    isRecording = false;
+    recordButton.textContent = 'Grabar';
+}
 
 function uploadAudio(blob) {
     let formData = new FormData();
@@ -62,12 +71,12 @@ function uploadAudio(blob) {
         method: 'POST',
         body: formData
     })
-        .then(response => response.text())
-        .then(text => {
-            userInput.value = text;
-            sendButton.disabled = false;
-        })
-        .catch(console.error);
+    .then(response => response.text())
+    .then(text => {
+        userInput.value = text;
+        sendButton.disabled = false;
+    })
+    .catch(console.error);
 }
 
 function appendMessage(sender, message) {
@@ -123,22 +132,29 @@ function processMessage(message) {
         },
         body: JSON.stringify({ question: message })
     })
-        .then(response => response.json())
-        .then(data => {
-            appendMessage('bot', data.answer);
-            isProcessing = false;
-            sendButton.disabled = userInput.value.trim() === '';
-        })
-        .catch(console.error);
+    .then(response => response.json())
+    .then(data => {
+        appendMessage('bot', data.answer);
+        isProcessing = false;
+        sendButton.disabled = userInput.value.trim() === '';
+    })
+    .catch(console.error);
 }
 
 modeToggle.addEventListener('change', () => {
     document.body.classList.toggle('dark-mode');
 });
 
-sidebarToggle.addEventListener('click', function () {
+sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
+    adjustChatContainer();
+});
 
+newConversationBtn.addEventListener('click', () => {
+    conversationContent.textContent = "New Conversation Started!";
+});
+
+function adjustChatContainer() {
     if (sidebar.classList.contains('collapsed')) {
         chatContainer.style.width = 'calc(100% - 50px)';
         chatContainer.style.marginLeft = '50px';
@@ -146,14 +162,10 @@ sidebarToggle.addEventListener('click', function () {
         chatContainer.style.width = 'calc(100% - 300px)';
         chatContainer.style.marginLeft = '300px';
     }
-});
+}
 
-newConversationBtn.addEventListener('click', function () {
-    conversationContent.textContent = "New Conversation Started!";
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    modeToggle.addEventListener('change', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    modeToggle.addEventListener('change', () => {
         chatContainer.classList.toggle('light-mode');
         chatContainer.classList.toggle('dark-mode');
     });
