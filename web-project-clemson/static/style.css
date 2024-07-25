@@ -1,3 +1,4 @@
+/* Estilos generales */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f5f5f5;
 }
 
+/* Modo claro y oscuro */
 .light-mode {
     background-color: #f5f5f5;
     color: #333;
@@ -15,6 +17,7 @@ body {
     color: #f5f5f5;
 }
 
+/* Sidebar */
 .sidebar {
     width: 300px;
     height: 100vh;
@@ -35,6 +38,7 @@ body {
     width: 50px;
 }
 
+/* Tooltip */
 .tooltip {
     position: absolute;
     top: 0;
@@ -78,6 +82,7 @@ body {
     opacity: 1;
 }
 
+/* Contenido del sidebar */
 .sidebar-content {
     padding-top: 20px;
     transition: opacity 0.3s;
@@ -88,6 +93,7 @@ body {
     pointer-events: none;
 }
 
+/* Lista de conversaciones */
 .conversation-list {
     padding: 0 20px;
 }
@@ -119,6 +125,7 @@ body {
     background-color: #242020;
 }
 
+/* Contenedor del chat */
 .chat-container {
     width: 70%;
     height: 100vh;
@@ -227,6 +234,7 @@ input:checked+.slider:before {
     border-radius: 34px;
 }
 
+/* Caja de chat */
 .chat-box {
     flex: 1;
     overflow-y: auto;
@@ -243,6 +251,7 @@ input:checked+.slider:before {
     color: #f5f5f5;
 }
 
+/* Contenedor de entrada */
 .input-container {
     display: flex;
     border-top: 1px solid #ccc;
@@ -289,17 +298,20 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* Mensajes del usuario y del bot */
 .user-message {
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
     margin: 10px 0;
 }
 
 .bot-message {
-    text-align: left;
+    display: flex;
+    justify-content: flex-start;
     margin: 10px 0;
 }
 
-.user-message .message-content {
+.message-content {
     display: inline-block;
     background-color: #f0f0f0;
     color: #333;
@@ -310,25 +322,18 @@ button:disabled {
 }
 
 .bot-message .message-content {
-    display: inline-block;
     background-color: #e0e0ff;
-    color: #333;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 60%;
-    text-align: left;
 }
 
-.voice-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+/* Estilos para el avatar */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-message .avatar {
     margin-left: 10px;
-}
-
-.voice-button:hover {
-    background-color: #0056b3;
+    margin-right: 0;
 }
